@@ -6,8 +6,18 @@ const signUp = (req, res) => {
   const { name, pwd, age, profession, interests } = req.body;
   console.log(req.body);
 
+  function response(status, msg) {
+    return res.status(status).send({ msg });
+  }
+
   if (!name || !pwd || !age || !profession || !interests) {
-    return res.status(401).send({ msg: "Preencha todos os campos" });
+    return response(401, "Preencha todos os campos");
+  }
+  if (name.includes(" ")) {
+    return response(401, "Nome não pode conter espaços");
+  }
+  if (pwd.length < 7 || pwd.length > 30) {
+    return response(401, "Senha deve conter pelo menos 7 caracteres");
   }
 
   const hashedPwd = bcrypt.hashSync(pwd, 10);
@@ -16,10 +26,12 @@ const signUp = (req, res) => {
   User.findOne({ name: name }, (err, user) => {
     if (err) {
       console.log(err);
-      return res.status(401).send({ msg: "Erro" });
+      return response(401, "Erro");
     }
 
-    if (user) return res.status(401).send({ msg: "Nome de usuário ja existe" });
+    if (user) {
+      return response(401, "Nome de usuário ja existe");
+    }
 
     User.create(
       {
@@ -31,11 +43,11 @@ const signUp = (req, res) => {
         interests,
       },
       (err) => {
-        if (err) return res.status(401).send({ msg: "Usuário não cadastrado" });
+        if (err) return response(401, "Erro, Usuário não cadastrado");
       }
     );
 
-    res.status(201).send({ msg: "Usuário cadastrado com sucesso" });
+    response(201, "Usuário cadastrado com sucesso");
   });
 };
 

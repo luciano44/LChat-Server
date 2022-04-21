@@ -8,6 +8,7 @@ const User = require("./models/User");
 
 // controllers
 const signUp = require("./controllers/signup");
+const signIn = require("./controllers/signin");
 
 //configuration
 const io = require("socket.io")(http, {
@@ -38,10 +39,11 @@ try {
 }
 
 app.get("/", (req, res) => {
-  res.send("hi");
+  res.send("home");
 });
 
 app.post("/signup", signUp);
+app.post("/signin", signIn);
 
 // SocketIO
 io.on("connection", (socket) => {});
