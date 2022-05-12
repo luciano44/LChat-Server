@@ -15,6 +15,10 @@ const signIn = async (req, res) => {
   }
 
   const userDB = await User.findOne({ name: name });
+  if (!userDB) {
+    return response(401, "Usuário inexistente");
+  }
+
   const hashedPwd = userDB.pwd;
 
   const match = await bcrypt.compare(pwd, hashedPwd);
@@ -24,7 +28,7 @@ const signIn = async (req, res) => {
   }
 
   const token = jwt.sign({ name: userDB.name }, process.env.JWT_SECRET, {
-    expiresIn: "1m",
+    expiresIn: "9999h",
   });
 
   res.status(200).send({ msg: "Login feito com sucesso", token });

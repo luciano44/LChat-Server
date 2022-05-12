@@ -4,7 +4,6 @@ const bcrypt = require("bcrypt");
 
 const signUp = (req, res) => {
   const { name, pwd, age, profession, interests } = req.body;
-  console.log(req.body);
 
   function response(status, msg) {
     return res.status(status).send({ msg });
