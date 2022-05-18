@@ -27,9 +27,7 @@ const signIn = async (req, res) => {
     return response(401, "Senha incorreta");
   }
 
-  const token = jwt.sign({ name: userDB.name }, process.env.JWT_SECRET, {
-    expiresIn: "9999h",
-  });
+  const token = jwt.sign({ name: userDB.name }, process.env.JWT_SECRET);
 
   res.status(200).send({ msg: "Login feito com sucesso", token });
 };
